@@ -15,8 +15,8 @@ RUN apk update && apk add --no-progress --no-cache \
 
 RUN cd /app && go mod download
 
-RUN cd /app/src/users/cmd && GOOS=linux GOARCH=amd64 go build -a -v -tags musl main.go
+RUN cd /app/src/websocket_server/cmd && GOOS=linux GOARCH=amd64 go build -a -v -tags musl main.go
 
-EXPOSE 3001
+EXPOSE 8010
 
-CMD ["/app/src/users/cmd/main"]
+CMD ["/app/src/websocket_server/cmd/main"]

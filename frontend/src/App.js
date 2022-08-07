@@ -1,6 +1,6 @@
 import {useState} from "react";
 
-const socket = new WebSocket("ws://localhost:8000");
+const socket = new WebSocket("ws://localhost:8010");
 
 const App = () => {
   const [messages, setMessages] = useState([])
@@ -10,20 +10,20 @@ const App = () => {
   }
 
 socket.onmessage = function (event) {
-    setMessages([...messages, event.data])
+      let message = JSON.parse(event.data)
+    setMessages([...messages, message.payload])
 };
 
   return (
     <>
         <div id="chat-box">
-            <ul>
-                {messages.map(message => {
-                    return <li key={message.username}>{message.body}</li>
-                })}
-            </ul>
+            {messages.map(message => {
+                return <p>{message.username}: {message.body}</p>
+            })}
         </div>
+        <input id={"message"} />
         <button onClick={() => addMessage({
-            room_id: 1,
+            room_id: "1",
             username: "johndoe",
             body: "I'm a message"
         })}>Hola</button>
