@@ -1,6 +1,9 @@
 run-db:
 	docker-compose -f docker/apps/mongodb/docker-compose.yaml up -d
 
+run-rabbit-queue:
+	docker-compose -f docker/apps/rabbitmq/docker-compose.yaml up -d
+
 build-users-app:
 	docker build -t aflores04/chat/users -f docker/apps/users/Dockerfile .
 
