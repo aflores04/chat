@@ -1,34 +1,46 @@
 import {useState} from "react";
+import jwt_decode from "jwt-decode";
 
 const socket = new WebSocket("ws://localhost:8010");
 
 const App = () => {
-  const [messages, setMessages] = useState([])
+    const [messages, setMessages] = useState([])
 
-  const addMessage = (message) => {
-      socket.send(JSON.stringify(message));
-  }
+    let state = {
+        message: ''
+    }
 
-socket.onmessage = function (event) {
-      let message = JSON.parse(event.data)
-    setMessages([...messages, message.payload])
-};
+    const addMessage = (event) => {
+        if (localStorage.key("token")) {
+            let decoded = jwt_decode(localStorage.getItem("token"))
 
-  return (
+            socket.send(JSON.stringify({
+                username: decoded.username,
+                body: state.message
+            }));
+        } else {
+            alert("login to publish messages")
+        }
+    }
+
+    socket.onmessage = function (event) {
+        let message = JSON.parse(event.data)
+        setMessages([...messages, message.payload])
+    };
+
+    return (
     <>
-        <div id="chat-box">
+        <div id="chat-box" style={{height: 500}}>
             {messages.map(message => {
                 return <p>{message.username}: {message.body}</p>
             })}
         </div>
-        <input id={"message"} />
-        <button onClick={() => addMessage({
-            room_id: "1",
-            username: "johndoe",
-            body: "I'm a message"
-        })}>Hola</button>
+        <input id={"message"} onChange={(event) => {
+            state.message = event.target.value
+        }} />
+        <button onClick={() => addMessage()}>Hola</button>
     </>
-  );
+    );
 }
 
 export default App;

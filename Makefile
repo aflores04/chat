@@ -16,4 +16,6 @@ run-users-app:
 run-websocket-server:
 	docker run -d -p 8010:8010 aflores04/chat/websocket_server
 
+run-dependencies: run-db run-rabbit-queue
+
 run-app: run-db run-rabbit-queue build-users-app build-websocket-server run-users-app run-websocket-server

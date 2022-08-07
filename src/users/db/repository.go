@@ -7,7 +7,7 @@ import (
 )
 
 type UserRepository interface {
-	Login(ctx context.Context, username *string, password *string) bool
+	Login(ctx context.Context, username *string, password *string) *domain.User
 	Register(ctx context.Context, user *domain.User) (*domain.User, error)
 	GetUserBy(ctx context.Context, key string, value *string) (*domain.User, error)
 }

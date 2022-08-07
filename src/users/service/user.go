@@ -10,7 +10,6 @@ import (
 
 const (
 	usernameKey = "username"
-	emailKey    = "email"
 )
 
 func (s userService) RegisterUser(ctx context.Context, req *request.RegisterUserRequest) (*response.RegisterUserResponse, error) {
@@ -19,11 +18,6 @@ func (s userService) RegisterUser(ctx context.Context, req *request.RegisterUser
 	isUsernameInDatabase, _ := s.repo.GetUserBy(ctx, usernameKey, req.User.Username)
 	if isUsernameInDatabase != nil {
 		return nil, &errors.UsernameAlreadyExistsError{}
-	}
-
-	isEmailInDatabase, _ := s.repo.GetUserBy(ctx, emailKey, req.User.Email)
-	if isEmailInDatabase != nil {
-		return nil, &errors.EmailAlreadyExistsError{}
 	}
 
 	user, err := s.repo.Register(ctx, req.User)
@@ -36,10 +30,13 @@ func (s userService) RegisterUser(ctx context.Context, req *request.RegisterUser
 	}, nil
 }
 
-func (s userService) LoginAttempt(ctx context.Context, req *request.LoginRequest) bool {
-	if s.repo.Login(ctx, req.Username, req.Password) {
-		return true
+func (s userService) LoginAttempt(ctx context.Context, req *request.LoginRequest) *response.LoginResponse {
+	user := s.repo.Login(ctx, req.Username, req.Password)
+	if user == nil {
+		return nil
 	}
 
-	return false
+	jwtToken := s.jwtClient.CreateJWT(map[string]interface{}{usernameKey: user.Username})
+
+	return &response.LoginResponse{Token: jwtToken}
 }

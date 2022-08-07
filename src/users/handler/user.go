@@ -27,11 +27,11 @@ func (h userHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	_ = json.NewDecoder(r.Body).Decode(&req)
 
-	logged := h.service.LoginAttempt(r.Context(), &req)
-	if !logged {
+	resp := h.service.LoginAttempt(r.Context(), &req)
+	if resp == nil {
 		utils.HttpErrorResponse(w, http.StatusBadRequest, &errors.InvalidUsernameOrPasswordError{})
 		return
 	}
 
-	utils.HttpResponse(w, http.StatusOK, "logged in!")
+	utils.HttpResponse(w, http.StatusOK, resp)
 }
