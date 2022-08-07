@@ -33,7 +33,7 @@ func (r userRepository) Register(ctx context.Context, user *domain.User) (*domai
 	return user, nil
 }
 
-// GetUserBy find user by available keys [username, email]
+// GetUserBy find user by available keys [username]
 func (r *userRepository) GetUserBy(ctx context.Context, key string, value *string) (*domain.User, error) {
 	user := &domain.User{}
 
@@ -49,24 +49,23 @@ func (r *userRepository) GetUserBy(ctx context.Context, key string, value *strin
 	return user, nil
 }
 
-func (r *userRepository) Login(ctx context.Context, username *string, password *string) bool {
+func (r *userRepository) Login(ctx context.Context, username *string, password *string) *domain.User {
 	user := &domain.User{}
 
 	collection := r.client.MongoClient.Database(r.client.Database).Collection(usersCollection)
 
-	hashPassword := helpers.Hash(password)
-
-	result := collection.FindOne(ctx, bson.M{usernameKey: username, passwordKey: hashPassword})
+	hashedPassword := helpers.Hash(password)
+	result := collection.FindOne(ctx, bson.M{usernameKey: username, passwordKey: hashedPassword})
 
 	err := result.Decode(user)
 	if err != nil {
 		log.Println("error decoding user login attempt")
-		return false
+		return nil
 	}
 
 	if user != nil {
-		return true
+		return user
 	}
 
-	return false
+	return nil
 }
