@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/gorilla/websocket"
 	"log"
+	"time"
 )
 
 type Client struct {
@@ -27,6 +28,7 @@ func (c *Client) Read() {
 		}
 
 		payload := Payload{}
+		payload.Timestamp = time.Now()
 
 		err = json.Unmarshal(p, &payload)
 		if err != nil {

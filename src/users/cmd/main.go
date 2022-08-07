@@ -20,7 +20,7 @@ func Start(handler handler.UserHandler) {
 		r.Post("/login", handler.Login)
 	})
 
-	http.ListenAndServe(":3000", r)
+	http.ListenAndServe(":3001", r)
 }
 
 func main() {

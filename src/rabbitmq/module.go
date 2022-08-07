@@ -105,5 +105,5 @@ func (r *rabbitQueue) Publish(ctx context.Context, queue amqp.Queue, message str
 		log.Panicf("%s: %s", "Failed to publish a message", err)
 	}
 
-	log.Printf(" [x] Sent %s\n", message)
+	log.Printf("Message published %s\n", message)
 }
