@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"github.com/aflores04/chat/src/chat/db"
-	"github.com/aflores04/chat/src/chat/domain"
+	"github.com/aflores04/chat/backend/src/chat_messages/db"
+	"github.com/aflores04/chat/backend/src/chat_messages/domain"
 )
 
 type ChatServiceModule struct{}

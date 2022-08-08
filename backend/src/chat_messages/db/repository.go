@@ -2,8 +2,8 @@ package db
 
 import (
 	"context"
-	"github.com/aflores04/chat/src/chat/domain"
-	"github.com/aflores04/chat/src/mongodb"
+	"github.com/aflores04/chat/backend/src/chat_messages/domain"
+	"github.com/aflores04/chat/backend/src/mongodb"
 )
 
 type ChatRepository interface {

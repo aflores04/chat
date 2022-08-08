@@ -15,7 +15,7 @@ func (m *PoolModule) ProvidePool() *Pool {
 		Register:        make(chan *Client),
 		Unregister:      make(chan *Client),
 		Clients:         make(map[*Client]bool),
-		Broadcast:       make(chan Message),
+		Broadcast:       make(chan WebsocketMessage),
 	}
 }
 
@@ -26,7 +26,7 @@ type Pool struct {
 	Register   chan *Client
 	Unregister chan *Client
 	Clients    map[*Client]bool
-	Broadcast  chan Message
+	Broadcast  chan WebsocketMessage
 }
 
 func (pool *Pool) Start() {
@@ -41,9 +41,9 @@ func (pool *Pool) Start() {
 			log.Println("{ Websocket } Client disconnected pool size: ", len(pool.Clients))
 			break
 		case message := <-pool.Broadcast:
+			log.Println("{ Websocket } Message received, sending to all clients: ", message)
+
 			// send messages to all handlers
-			log.Println("Message received, sending to all clients")
-			log.Println(message)
 			for _, handler := range pool.MessageHandlers {
 				go handler.Handle(message)
 			}

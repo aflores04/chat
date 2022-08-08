@@ -2,14 +2,14 @@ package handler
 
 import (
 	"encoding/json"
-	"github.com/aflores04/chat/src/users/errors"
-	"github.com/aflores04/chat/src/users/request"
-	"github.com/aflores04/chat/src/utils"
+	"github.com/aflores04/chat/backend/src/users/errors"
+	request2 "github.com/aflores04/chat/backend/src/users/request"
+	"github.com/aflores04/chat/backend/src/utils"
 	"net/http"
 )
 
 func (h userHandler) Register(w http.ResponseWriter, r *http.Request) {
-	var req request.RegisterUserRequest
+	var req request2.RegisterUserRequest
 
 	_ = json.NewDecoder(r.Body).Decode(&req)
 
@@ -23,7 +23,7 @@ func (h userHandler) Register(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h userHandler) Login(w http.ResponseWriter, r *http.Request) {
-	var req request.LoginRequest
+	var req request2.LoginRequest
 
 	_ = json.NewDecoder(r.Body).Decode(&req)
 

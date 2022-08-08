@@ -2,10 +2,8 @@ package handler
 
 import (
 	"context"
-	"github.com/AlekSi/pointer"
-	"github.com/aflores04/chat/src/chat/domain"
-	"github.com/aflores04/chat/src/chat/service"
-	"github.com/aflores04/chat/src/websocket"
+	"github.com/aflores04/chat/backend/src/chat_messages/service"
+	"github.com/aflores04/chat/backend/src/websocket"
 	"log"
 )
 
@@ -16,30 +14,18 @@ func (*MessageHandlerModule) ProvideMessageHandler(service service.ChatService) 
 }
 
 type MessageHandler interface {
-	Handle(message websocket.Message)
+	Handle(message websocket.WebsocketMessage)
 }
 
 type messageHandler struct {
 	chatService service.ChatService
 }
 
-func (h messageHandler) Handle(wsMessage websocket.Message) {
+func (h messageHandler) Handle(wsMessage websocket.WebsocketMessage) {
 	ctx := context.Background()
 
-	message := transformWebsocketMessage(wsMessage)
-
-	_, err := h.chatService.StoreMessage(ctx, message)
+	_, err := h.chatService.StoreMessage(ctx, &wsMessage.Payload)
 	if err != nil {
 		log.Println("error storing message from handler", err)
 	}
-}
-
-func transformWebsocketMessage(wsMessage websocket.Message) *domain.Message {
-	message := &domain.Message{}
-	message.Timestamp = pointer.ToTime(wsMessage.Payload.Timestamp)
-	message.RoomId = pointer.ToString(wsMessage.Payload.RoomId)
-	message.Username = pointer.ToString(wsMessage.Payload.Username)
-	message.Body = pointer.ToString(wsMessage.Payload.Body)
-
-	return message
 }
