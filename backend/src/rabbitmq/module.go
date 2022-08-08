@@ -47,6 +47,7 @@ func NewRabbitQueue(uri string) RabbitQueue {
 type RabbitQueue interface {
 	CreateQueue(name string) amqp.Queue
 	Publish(ctx context.Context, queue amqp.Queue, message string)
+	PollMessages(queue amqp.Queue) <-chan amqp.Delivery
 }
 
 type rabbitQueue struct {
@@ -106,4 +107,21 @@ func (r *rabbitQueue) Publish(ctx context.Context, queue amqp.Queue, message str
 	}
 
 	log.Printf("Message published %s\n", message)
+}
+
+func (r *rabbitQueue) PollMessages(queue amqp.Queue) <-chan amqp.Delivery {
+	messages, err := r.Channel.Consume(
+		queue.Name, // queue
+		"",         // consumer
+		true,       // auto-ack
+		false,      // exclusive
+		false,      // no-local
+		false,      // no-wait
+		nil,        // args
+	)
+	if err != nil {
+		log.Panicf("%s: %s", "Failed to poll messages", err)
+	}
+
+	return messages
 }

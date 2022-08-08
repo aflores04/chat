@@ -28,15 +28,15 @@ type WebsocketServer interface {
 	RunOnPort(port string)
 
 	// AddHandler add handler for messages received from websocket
-	AddHandler(handler MessageHandler)
+	AddMessageHandler(handler MessageHandler)
 }
 
 type websocketServer struct {
 	pool *Pool
 }
 
-func (s *websocketServer) AddHandler(handler MessageHandler) {
-	s.pool.Handlers = append(s.pool.Handlers, handler)
+func (s *websocketServer) AddMessageHandler(handler MessageHandler) {
+	s.pool.MessageHandlers = append(s.pool.MessageHandlers, handler)
 }
 
 func (s websocketServer) RunOnPort(port string) {
