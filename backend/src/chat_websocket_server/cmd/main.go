@@ -13,8 +13,10 @@ import (
 func Start(
 	websocketServer websocket.WebsocketServer,
 	messageHandler handler.MessageHandler,
+	stockCommandHandler handler.StockCommandHandler,
 ) {
-	websocketServer.AddHandler(messageHandler)
+	websocketServer.AddMessageHandler(messageHandler)
+	websocketServer.AddMessageHandler(stockCommandHandler)
 	websocketServer.RunOnPort("8010")
 }
 
@@ -23,13 +25,11 @@ func main() {
 	injector.Install(
 		&mongodb.MongoModule{},
 		&rabbitmq.RabbitModule{},
-
 		&db.ChatRepositoryModule{},
 		&service.ChatServiceModule{},
-
 		&websocket.PoolModule{},
-
 		&handler.MessageHandlerModule{},
+		&handler.StockCommandHandlerModule{},
 		&websocket.WebsocketServerModule{},
 	)
 	injector.Call(Start)
