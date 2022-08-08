@@ -2,14 +2,14 @@ package stock
 
 import (
 	"encoding/csv"
-	"errors"
 	"fmt"
 	"net/http"
 )
 
 const (
-	SymbolPosition = 0
-	OpenPosition   = 3
+	SymbolPosition               = 0
+	OpenPosition                 = 3
+	NDAmountWhenStockDoesntExist = 7
 )
 
 type StockServiceModule struct {
@@ -28,6 +28,9 @@ type stockService struct {
 }
 
 func (s *stockService) GetStockByCode(code string) ([]string, error) {
+	// will be used to know if some stock code doesn't exist
+	var ndCount int = 0
+
 	resp, err := http.Get(parseUrl(code))
 	if err != nil {
 		return nil, err
@@ -44,16 +47,22 @@ func (s *stockService) GetStockByCode(code string) ([]string, error) {
 			continue
 		}
 
+		// find ND in received data from stock CSV
 		for _, col := range line {
 			if col == "N/D" {
-				return nil, &StockNotFoundError{}
+				ndCount++
 			}
+		}
+
+		// check if amount is more than expected
+		if ndCount == NDAmountWhenStockDoesntExist {
+			return nil, &StockNotFoundError{}
 		}
 
 		return line, nil
 	}
 
-	return nil, errors.New("symbol not found")
+	return nil, &StockNotFoundError{}
 }
 
 func parseUrl(code string) string {

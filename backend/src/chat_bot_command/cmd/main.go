@@ -4,10 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/aflores04/chat/src/rabbitmq"
-	"github.com/aflores04/chat/src/stock"
-	ws "github.com/aflores04/chat/src/websocket"
-	"github.com/aflores04/chat/src/websocket_server/handler"
+	"github.com/AlekSi/pointer"
+	"github.com/aflores04/chat/backend/src/chat_messages/domain"
+	"github.com/aflores04/chat/backend/src/chat_websocket_server/handler"
+	"github.com/aflores04/chat/backend/src/rabbitmq"
+	"github.com/aflores04/chat/backend/src/stock"
 	"github.com/alecthomas/inject"
 	"github.com/alecthomas/kingpin"
 	"github.com/gorilla/websocket"
@@ -56,13 +57,13 @@ func (a *Application) Start(
 			var message []byte
 
 			// Parse received command
-			receivedPayload := &ws.Payload{}
-			_ = json.NewDecoder(bytes.NewReader(event.Body)).Decode(&receivedPayload)
+			receivedMessage := &domain.Message{}
+			_ = json.NewDecoder(bytes.NewReader(event.Body)).Decode(&receivedMessage)
 
-			log.Println("Command received in bot: ", receivedPayload)
+			log.Println("Command received in bot: ", receivedMessage)
 
 			// get stock data fro service
-			stockData, err := stockService.GetStockByCode(receivedPayload.Body)
+			stockData, err := stockService.GetStockByCode(*receivedMessage.Body)
 			if err != nil {
 				log.Println("error getting stock data")
 				message = createMessage("stock not found")
@@ -90,11 +91,11 @@ func (a *Application) Start(
 }
 
 func createMessage(body string) []byte {
-	sentPayload := &ws.Payload{
-		Username: CommandBotUsername,
-		Body:     body,
+	message := &domain.Message{
+		Username: pointer.ToString(CommandBotUsername),
+		Body:     pointer.ToString(body),
 	}
-	b, err := json.Marshal(&sentPayload)
+	b, err := json.Marshal(&message)
 	if err != nil {
 		log.Println("error marshall payload from bot: ", err)
 	}

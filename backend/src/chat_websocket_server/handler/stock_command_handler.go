@@ -3,8 +3,9 @@ package handler
 import (
 	"context"
 	"encoding/json"
-	"github.com/aflores04/chat/src/rabbitmq"
-	"github.com/aflores04/chat/src/websocket"
+	"github.com/AlekSi/pointer"
+	"github.com/aflores04/chat/backend/src/rabbitmq"
+	"github.com/aflores04/chat/backend/src/websocket"
 	"log"
 	"regexp"
 	"strings"
@@ -27,7 +28,7 @@ func (*MessageHandlerModule) ProvideCommandHandler(wsServer websocket.WebsocketS
 }
 
 type StockCommandHandler interface {
-	Handle(message websocket.Message)
+	Handle(message websocket.WebsocketMessage)
 }
 
 type stockCommandHandler struct {
@@ -35,17 +36,17 @@ type stockCommandHandler struct {
 	wsServer websocket.WebsocketServer
 }
 
-func (h stockCommandHandler) Handle(wsMessage websocket.Message) {
+func (h stockCommandHandler) Handle(wsMessage websocket.WebsocketMessage) {
 	ctx := context.Background()
 
-	if !IsStockCommand(wsMessage.Payload.Body) {
+	if !IsStockCommand(*wsMessage.Payload.Body) {
 		return
 	}
 
 	// get stock code from command
 	// add stock code to body in payload to be treated by the bot
-	stockCode := strings.Split(wsMessage.Payload.Body, StockCommandDivider)
-	wsMessage.Payload.Body = stockCode[StockCommandCodePosition]
+	stockCode := strings.Split(*wsMessage.Payload.Body, StockCommandDivider)
+	wsMessage.Payload.Body = pointer.ToString(stockCode[StockCommandCodePosition])
 
 	b, err := json.Marshal(wsMessage.Payload)
 	if err != nil {

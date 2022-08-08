@@ -2,8 +2,8 @@ package db
 
 import (
 	"context"
-	"github.com/aflores04/chat/src/mongodb"
-	"github.com/aflores04/chat/src/users/domain"
+	"github.com/aflores04/chat/backend/src/mongodb"
+	"github.com/aflores04/chat/backend/src/users/domain"
 )
 
 type UserRepository interface {

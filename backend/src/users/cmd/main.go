@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/aflores04/chat/src/jwt"
-	"github.com/aflores04/chat/src/mongodb"
-	"github.com/aflores04/chat/src/users/db"
-	"github.com/aflores04/chat/src/users/handler"
-	"github.com/aflores04/chat/src/users/service"
+	"github.com/aflores04/chat/backend/src/jwt"
+	"github.com/aflores04/chat/backend/src/mongodb"
+	"github.com/aflores04/chat/backend/src/users/db"
+	"github.com/aflores04/chat/backend/src/users/handler"
+	"github.com/aflores04/chat/backend/src/users/service"
 	"github.com/alecthomas/inject"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"

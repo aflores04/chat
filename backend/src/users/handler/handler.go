@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/aflores04/chat/src/users/service"
+	"github.com/aflores04/chat/backend/src/users/service"
 	"net/http"
 )
 

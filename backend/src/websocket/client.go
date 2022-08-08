@@ -2,6 +2,8 @@ package websocket
 
 import (
 	"encoding/json"
+	"github.com/AlekSi/pointer"
+	"github.com/aflores04/chat/backend/src/chat_messages/domain"
 	"github.com/gorilla/websocket"
 	"log"
 	"time"
@@ -27,15 +29,15 @@ func (c *Client) Read() {
 			return
 		}
 
-		payload := Payload{}
-		payload.Timestamp = time.Now()
+		payload := domain.Message{}
+		payload.Timestamp = pointer.ToTime(time.Now())
 
 		err = json.Unmarshal(p, &payload)
 		if err != nil {
 			log.Println(err)
 		}
 
-		message := Message{Type: messageType, Payload: payload}
+		message := WebsocketMessage{Type: messageType, Payload: payload}
 		c.Pool.Broadcast <- message
 	}
 }

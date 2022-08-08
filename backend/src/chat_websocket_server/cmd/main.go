@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/aflores04/chat/src/chat/db"
-	"github.com/aflores04/chat/src/chat/service"
-	"github.com/aflores04/chat/src/mongodb"
-	"github.com/aflores04/chat/src/rabbitmq"
-	"github.com/aflores04/chat/src/websocket"
-	"github.com/aflores04/chat/src/websocket_server/handler"
+	"github.com/aflores04/chat/backend/src/chat_messages/db"
+	"github.com/aflores04/chat/backend/src/chat_messages/service"
+	"github.com/aflores04/chat/backend/src/chat_websocket_server/handler"
+	"github.com/aflores04/chat/backend/src/mongodb"
+	"github.com/aflores04/chat/backend/src/rabbitmq"
+	"github.com/aflores04/chat/backend/src/websocket"
 	"github.com/alecthomas/inject"
 )
 
