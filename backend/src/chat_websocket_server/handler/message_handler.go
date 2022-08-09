@@ -9,7 +9,7 @@ import (
 
 type MessageHandlerModule struct{}
 
-func (*MessageHandlerModule) ProvideMessageHandler(service service.ChatService) MessageHandler {
+func (*MessageHandlerModule) ProvideMessageHandler(service service.ChatMessagesService) MessageHandler {
 	return &messageHandler{chatService: service}
 }
 
@@ -18,7 +18,7 @@ type MessageHandler interface {
 }
 
 type messageHandler struct {
-	chatService service.ChatService
+	chatService service.ChatMessagesService
 }
 
 func (h messageHandler) Handle(wsMessage websocket.WebsocketMessage) {

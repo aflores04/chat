@@ -6,18 +6,19 @@ import (
 	"github.com/aflores04/chat/backend/src/mongodb"
 )
 
-type ChatRepository interface {
+type ChatMessagesRepository interface {
 	StoreMessage(ctx context.Context, message *domain.Message) (*domain.Message, error)
+	GetMessages(ctx context.Context, amount int64, order int64, sortKey string) ([]*domain.Message, error)
 }
 
-type ChatRepositoryModule struct{}
+type ChatMessagesRepositoryModule struct{}
 
-type chatRepository struct {
+type chatMessagesRepository struct {
 	client *mongodb.MongoDB
 }
 
-func (*ChatRepositoryModule) ProvideUserRepository(client *mongodb.MongoDB) ChatRepository {
-	return &chatRepository{
+func (*ChatMessagesRepositoryModule) ProvideUserRepository(client *mongodb.MongoDB) ChatMessagesRepository {
+	return &chatMessagesRepository{
 		client: client,
 	}
 }

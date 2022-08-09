@@ -25,8 +25,8 @@ func main() {
 	injector.Install(
 		&mongodb.MongoModule{},
 		&rabbitmq.RabbitModule{},
-		&db.ChatRepositoryModule{},
-		&service.ChatServiceModule{},
+		&db.ChatMessagesRepositoryModule{},
+		&service.ChatMessagesServiceModule{},
 		&websocket.PoolModule{},
 		&handler.MessageHandlerModule{},
 		&handler.StockCommandHandlerModule{},

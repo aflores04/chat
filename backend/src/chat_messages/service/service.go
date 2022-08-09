@@ -4,21 +4,24 @@ import (
 	"context"
 	"github.com/aflores04/chat/backend/src/chat_messages/db"
 	"github.com/aflores04/chat/backend/src/chat_messages/domain"
+	"github.com/aflores04/chat/backend/src/chat_messages/request"
+	"github.com/aflores04/chat/backend/src/chat_messages/response"
 )
 
-type ChatServiceModule struct{}
+type ChatMessagesServiceModule struct{}
 
-func (*ChatServiceModule) ProvideChatService(
-	chatRepository db.ChatRepository) ChatService {
-	return &chatService{
+func (*ChatMessagesServiceModule) ProvideChatService(
+	chatRepository db.ChatMessagesRepository) ChatMessagesService {
+	return &chatMessagesService{
 		repo: chatRepository,
 	}
 }
 
-type ChatService interface {
+type ChatMessagesService interface {
 	StoreMessage(ctx context.Context, message *domain.Message) (*domain.Message, error)
+	GetMessages(ctx context.Context, req *request.ListMessagesRequest) (*response.ListMessagesResponse, error)
 }
 
-type chatService struct {
-	repo db.ChatRepository
+type chatMessagesService struct {
+	repo db.ChatMessagesRepository
 }
