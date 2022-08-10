@@ -26,6 +26,10 @@ const App = () => {
     }, [])
 
     const addMessage = (event) => {
+        if (state.message == "") {
+            alert("message cannot be empty")
+            return
+        }
         if (localStorage.key("token")) {
             let decoded = jwt_decode(localStorage.getItem("token"))
 
