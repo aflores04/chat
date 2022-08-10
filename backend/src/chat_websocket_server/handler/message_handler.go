@@ -24,6 +24,10 @@ type messageHandler struct {
 func (h messageHandler) Handle(wsMessage websocket.WebsocketMessage) {
 	ctx := context.Background()
 
+	if IsStockCommand(*wsMessage.Payload.Body) {
+		return
+	}
+
 	_, err := h.chatService.StoreMessage(ctx, &wsMessage.Payload)
 	if err != nil {
 		log.Println("error storing message from handler", err)

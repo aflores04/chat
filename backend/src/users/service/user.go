@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/aflores04/chat/backend/src/users/errors"
 	"github.com/aflores04/chat/backend/src/users/helpers"
-	request2 "github.com/aflores04/chat/backend/src/users/request"
+	"github.com/aflores04/chat/backend/src/users/request"
 	"github.com/aflores04/chat/backend/src/users/response"
 )
 
@@ -12,7 +12,7 @@ const (
 	usernameKey = "username"
 )
 
-func (s userService) RegisterUser(ctx context.Context, req *request2.RegisterUserRequest) (*response.RegisterUserResponse, error) {
+func (s userService) RegisterUser(ctx context.Context, req *request.RegisterUserRequest) (*response.RegisterUserResponse, error) {
 	req.User.Password = helpers.Hash(req.User.Password)
 
 	isUsernameInDatabase, _ := s.repo.GetUserBy(ctx, usernameKey, req.User.Username)
@@ -30,7 +30,7 @@ func (s userService) RegisterUser(ctx context.Context, req *request2.RegisterUse
 	}, nil
 }
 
-func (s userService) LoginAttempt(ctx context.Context, req *request2.LoginRequest) *response.LoginResponse {
+func (s userService) LoginAttempt(ctx context.Context, req *request.LoginRequest) *response.LoginResponse {
 	user := s.repo.Login(ctx, req.Username, req.Password)
 	if user == nil {
 		return nil

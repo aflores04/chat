@@ -8,6 +8,7 @@ import (
 	"github.com/aflores04/chat/backend/src/rabbitmq"
 	"github.com/aflores04/chat/backend/src/websocket"
 	"github.com/alecthomas/inject"
+	"log"
 )
 
 func Start(
@@ -17,6 +18,7 @@ func Start(
 ) {
 	websocketServer.AddMessageHandler(messageHandler)
 	websocketServer.AddMessageHandler(stockCommandHandler)
+	log.Println("Chat Websocket server started ...")
 	websocketServer.RunOnPort("8010")
 }
 
